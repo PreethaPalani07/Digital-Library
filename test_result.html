@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Test Result: {{ test.title }}{% endblock %}
+
+{% block content %}
+<h2>Test Result: {{ test.title }}</h2>
+<hr>
+<div class="alert alert-info">
+    <h4>Your Score: {{ attempt.score }} / {{ attempt.total_questions }}</h4>
+    <p>Percentage: {{ "%.2f"|format((attempt.score / attempt.total_questions) * 100 if attempt.total_questions > 0 else 0) }}%</p>
+    <p>Attempted on: {{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+</div>
+
+<!-- Optional: Display questions with correct answers and student's answers -->
+<!-- This requires passing more data from the backend or retrieving it here -->
+
+<a href="{{ url_for('list_tests') }}" class="btn btn-primary">Back to Test List</a>
+{% if current_user.role == 'student' %}
+<a href="{{ url_for('dashboard_student') }}" class="btn btn-secondary">Go to Dashboard</a>
+{% elif current_user.role == 'teacher' %}
+<a href="{{ url_for('view_test_records', test_id=test.id) }}" class="btn btn-info">View All Records for this Test</a>
+{% endif %}
+{% endblock %}

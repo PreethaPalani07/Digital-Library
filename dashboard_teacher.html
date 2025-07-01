@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Teacher Dashboard{% endblock %}
+
+{% block content %}
+<h2>Teacher Dashboard</h2>
+<p>Welcome, {{ current_user.username }}!</p>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h4>Your Actions</h4>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="{{ url_for('upload_material') }}">Upload New Learning Material</a></li>
+            <li class="list-group-item"><a href="{{ url_for('create_test') }}">Create a New Test</a></li>
+            <li class="list-group-item"><a href="{{ url_for('chat') }}">Chat with Students</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="mt-5">
+    <h4>Your Uploaded Materials</h4>
+    {% if uploaded_materials %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Subject</th>
+                    <th>Type</th>
+                    <th>Uploaded</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for material in uploaded_materials %}
+                <tr>
+                    <td><a href="{{ url_for('uploaded_file', filename=material.filename) }}" target="_blank">{{ material.title }}</a></td>
+                    <td>{{ material.subject }}</td>
+                    <td>{{ material.file_type }}</td>
+                    <td>{{ material.upload_date.strftime('%Y-%m-%d') }}</td>
+                    <td>
+                        <form action="{{ url_for('delete_material', material_id=material.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete this material?');" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
+                        <!-- Add edit link if implemented -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>You haven't uploaded any materials yet. <a href="{{ url_for('upload_material') }}">Upload now</a>.</p>
+    {% endif %}
+</div>
+
+<div class="mt-4">
+    <h4>Your Created Tests</h4>
+    {% if created_tests %}
+        <ul class="list-group">
+            {% for test in created_tests %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ test.title }}</strong> ({{ test.subject }})
+                        <br>
+                        <small>{{ test.questions|length }} Questions</small>
+                    </div>
+                    <div>
+                        <a href="{{ url_for('add_questions_to_test', test_id=test.id) }}" class="btn btn-sm btn-info mr-2">Manage Questions</a>
+                        <a href="{{ url_for('view_test_records', test_id=test.id) }}" class="btn btn-sm btn-secondary">View Records</a>
+                        <!-- Add delete test option here if needed -->
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>You haven't created any tests yet. <a href="{{ url_for('create_test') }}">Create one now</a>.</p>
+    {% endif %}
+</div>
+{% endblock %}

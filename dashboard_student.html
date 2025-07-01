@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard{% endblock %}
+
+{% block content %}
+<h2>Student Dashboard</h2>
+<p>Welcome, {{ current_user.username }}!</p>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h4>Quick Links</h4>
+        <ul class="list-group">
+            <li class="list-group-item"><a href="{{ url_for('view_materials') }}">Browse Learning Materials</a></li>
+            <li class="list-group-item"><a href="{{ url_for('list_tests') }}">Take an Online Test</a></li>
+            <li class="list-group-item"><a href="{{ url_for('chat') }}">Chat with Teachers</a></li>
+        </ul>
+    </div>
+    <div class="col-md-6">
+        <h4>Recent Activity (Example)</h4>
+        <p>No recent activity to display yet.</p>
+        <!-- You can add things like recent test scores, recently viewed materials here -->
+    </div>
+</div>
+
+<div class="mt-5">
+    <h4>Available Materials (Recent 5)</h4>
+    {% if materials %}
+        <div class="list-group">
+            {% for material in materials[:5] %}
+            <a href="{{ url_for('uploaded_file', filename=material.filename) }}" class="list-group-item list-group-item-action" target="_blank">
+                <h5 class="mb-1">{{ material.title }}</h5>
+                <p class="mb-1">{{ material.description[:100] if material.description else 'No description' }}...</p>
+                <small>Subject: {{ material.subject }} | Type: {{ material.file_type }} | Uploaded: {{ material.upload_date.strftime('%Y-%m-%d') }}</small>
+            </a>
+            {% endfor %}
+        </div>
+        {% if materials|length > 5 %}
+        <a href="{{ url_for('view_materials') }}" class="btn btn-sm btn-outline-primary mt-2">View All Materials</a>
+        {% endif %}
+    {% else %}
+        <p>No materials available at the moment.</p>
+    {% endif %}
+</div>
+
+<div class="mt-4">
+    <h4>Available Tests (Recent 5)</h4>
+    {% if tests %}
+        <ul class="list-group">
+            {% for test in tests[:5] %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ test.title }} ({{ test.subject }})
+                    <a href="{{ url_for('take_test', test_id=test.id) }}" class="btn btn-sm btn-success">Take Test</a>
+                </li>
+            {% endfor %}
+        </ul>
+         {% if tests|length > 5 %}
+        <a href="{{ url_for('list_tests') }}" class="btn btn-sm btn-outline-primary mt-2">View All Tests</a>
+        {% endif %}
+    {% else %}
+        <p>No tests available at the moment.</p>
+    {% endif %}
+</div>
+{% endblock %}

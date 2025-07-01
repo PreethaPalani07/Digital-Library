@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<h2>Manage Users</h2>
+<p>Total Users: {{ users|length }}</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Role Specific ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role|capitalize }}</td>
+            <td>
+                {% if user.role == 'student' %}{{ user.admission_no if user.admission_no else 'N/A' }}{% endif %}
+                {% if user.role == 'teacher' %}{{ user.staff_code if user.staff_code else 'N/A' }}{% endif %}
+            </td>
+            <td>
+                {% if user.id != current_user.id %} {# Admin cannot delete self #}
+                <form action="{{ url_for('admin_delete_user', user_id=user.id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete user {{ user.username }}? This action cannot be undone.');" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+                {% else %}
+                <button class="btn btn-secondary btn-sm" disabled>Cannot Delete Self</button>
+                {% endif %}
+                <!-- Add edit user functionality link here if desired -->
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('dashboard_admin') }}" class="btn btn-secondary">Back to Admin Dashboard</a>
+{% endblock %}

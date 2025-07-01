@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Register</h2>
+        <form method="POST" action="{{ url_for('register') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.username.label(class="form-control-label") }}
+                {{ form.username(class="form-control " + ("is-invalid" if form.username.errors else ""), placeholder="Choose a username") }}
+                {% if form.username.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.username.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.email.label(class="form-control-label") }}
+                {{ form.email(class="form-control " + ("is-invalid" if form.email.errors else ""), placeholder="Enter your email") }}
+                {% if form.email.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label(class="form-control-label") }}
+                {{ form.password(class="form-control " + ("is-invalid" if form.password.errors else ""), placeholder="Create a password") }}
+                {% if form.password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.confirm_password.label(class="form-control-label") }}
+                {{ form.confirm_password(class="form-control " + ("is-invalid" if form.confirm_password.errors else ""), placeholder="Confirm your password") }}
+                {% if form.confirm_password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.confirm_password.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.role.label(class="form-control-label") }}
+                {{ form.role(class="form-control " + ("is-invalid" if form.role.errors else ""), id="roleSelect") }}
+                {% if form.role.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.role.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group" id="admissionNoGroup" style="display: none;">
+                {{ form.admission_no.label(class="form-control-label") }}
+                {{ form.admission_no(class="form-control " + ("is-invalid" if form.admission_no.errors else ""), placeholder="Enter Admission Number") }}
+                 {% if form.admission_no.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.admission_no.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group" id="staffCodeGroup" style="display: none;">
+                {{ form.staff_code.label(class="form-control-label") }}
+                {{ form.staff_code(class="form-control " + ("is-invalid" if form.staff_code.errors else ""), placeholder="Enter Staff Code") }}
+                 {% if form.staff_code.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.staff_code.errors %}<span>{{ error }}</span>{% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary btn-block") }}
+            </div>
+        </form>
+        <p class="text-center">Already have an account? <a href="{{ url_for('login') }}">Log in here</a></p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleSelect = document.getElementById('roleSelect');
+        const admissionNoGroup = document.getElementById('admissionNoGroup');
+        const staffCodeGroup = document.getElementById('staffCodeGroup');
+
+        function toggleFields() {
+            if (roleSelect.value === 'student') {
+                admissionNoGroup.style.display = 'block';
+                staffCodeGroup.style.display = 'none';
+            } else if (roleSelect.value === 'teacher') {
+                admissionNoGroup.style.display = 'none';
+                staffCodeGroup.style.display = 'block';
+            } else {
+                admissionNoGroup.style.display = 'none';
+                staffCodeGroup.style.display = 'none';
+            }
+        }
+        // Initial check
+        toggleFields();
+        // Add event listener
+        roleSelect.addEventListener('change', toggleFields);
+    });
+</script>
+{% endblock %}

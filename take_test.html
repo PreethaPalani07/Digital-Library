@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Take Test: {{ test.title }}{% endblock %}
+
+{% block content %}
+<h2>{{ test.title }}</h2>
+<p>Subject: {{ test.subject }}</p>
+<hr>
+
+{% if test.questions %}
+<form method="POST" action="{{ url_for('take_test', test_id=test.id) }}">
+    {% for question in test.questions %}
+    <div class="card mb-3">
+        <div class="card-header">
+            Question {{ loop.index }}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ question.text }}</h5>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_a" value="a" required>
+                <label class="form-check-label" for="q{{ question.id }}_a">
+                    A) {{ question.option_a }}
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_b" value="b">
+                <label class="form-check-label" for="q{{ question.id }}_b">
+                    B) {{ question.option_b }}
+                </label>
+            </div>
+            {% if question.option_c %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_c" value="c">
+                <label class="form-check-label" for="q{{ question.id }}_c">
+                    C) {{ question.option_c }}
+                </label>
+            </div>
+            {% endif %}
+            {% if question.option_d %}
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="question_{{ question.id }}" id="q{{ question.id }}_d" value="d">
+                <label class="form-check-label" for="q{{ question.id }}_d">
+                    D) {{ question.option_d }}
+                </label>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-success btn-lg">Submit Test</button>
+</form>
+{% else %}
+<p>This test currently has no questions. Please contact the instructor.</p>
+<a href="{{ url_for('list_tests') }}" class="btn btn-secondary">Back to Tests</a>
+{% endif %}
+{% endblock %}

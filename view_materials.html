@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}View Learning Materials{% endblock %}
+
+{% block content %}
+<h2>Learning Materials</h2>
+
+<form method="GET" action="{{ url_for('view_materials') }}" class="form-inline mb-3">
+    <input type="text" name="search" class="form-control mr-sm-2" placeholder="Search title/description..." value="{{ current_search }}">
+    <select name="subject" class="form-control mr-sm-2">
+        <option value="">All Subjects</option>
+        {% for subj in subjects %}
+        <option value="{{ subj }}" {% if subj == current_subject %}selected{% endif %}>{{ subj }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-outline-success my-2 my-sm-0">Search</button>
+    {% if current_search or current_subject %}
+    <a href="{{ url_for('view_materials') }}" class="btn btn-outline-secondary ml-2">Clear</a>
+    {% endif %}
+</form>
+
+{% if materials %}
+    <div class="row">
+        {% for material in materials %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ material.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Subject: {{ material.subject }}</h6>
+                    <p class="card-text">{{ material.description[:150] if material.description else 'No description available.' }}...</p>
+                    <p><small>Type: {{ material.file_type }} | Uploaded by: {{ material.uploader.username }} on {{ material.upload_date.strftime('%Y-%m-%d') }}</small></p>
+                </div>
+                <div class="card-footer">
+                     <a href="{{ url_for('uploaded_file', filename=material.filename) }}" class="btn btn-primary btn-sm" target="_blank">
+                        {% if material.file_type in ['mp4', 'mov', 'avi', 'mkv'] %}View Video{% else %}Download/View{% endif %}
+                    </a>
+                    {% if current_user.role == 'admin' or (current_user.role == 'teacher' and material.user_id == current_user.id) %}
+                    <form action="{{ url_for('delete_material', material_id=material.id) }}" method="POST" onsubmit="return confirm('Are you sure?');" style="display:inline; float:right;">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No materials found matching your criteria. Try broadening your search or <a href="{{ url_for('view_materials') }}">view all materials</a>.</p>
+{% endif %}
+{% endblock %}

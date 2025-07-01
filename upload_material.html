@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Upload Material{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>Upload New Learning Material</h2>
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.title.label(class="form-control-label") }}
+                {{ form.title(class="form-control " + ("is-invalid" if form.title.errors else "")) }}
+                {% if form.title.errors %}
+                    <div class="invalid-feedback">{% for error in form.title.errors %}<span>{{ error }}</span>{% endfor %}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.description.label(class="form-control-label") }}
+                {{ form.description(class="form-control " + ("is-invalid" if form.description.errors else ""), rows="3") }}
+                 {% if form.description.errors %}
+                    <div class="invalid-feedback">{% for error in form.description.errors %}<span>{{ error }}</span>{% endfor %}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.subject.label(class="form-control-label") }}
+                {{ form.subject(class="form-control " + ("is-invalid" if form.subject.errors else "")) }}
+                {% if form.subject.errors %}
+                    <div class="invalid-feedback">{% for error in form.subject.errors %}<span>{{ error }}</span>{% endfor %}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.material_file.label(class="form-control-label") }}
+                {{ form.material_file(class="form-control-file " + ("is-invalid" if form.material_file.errors else "")) }}
+                <small class="form-text text-muted">Allowed types: mp4, mov, avi, mkv, pdf, doc, docx, ppt, pptx, txt</small>
+                {% if form.material_file.errors %}
+                    <div class="invalid-feedback d-block">{% for error in form.material_file.errors %}<span>{{ error }}</span>{% endfor %}</div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

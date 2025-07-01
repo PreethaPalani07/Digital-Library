@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Add Questions to {{ test.title }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7">
+        <h2>Add Questions to: {{ test.title }}</h2>
+        <p>Subject: {{ test.subject }}</p>
+        <form method="POST" action="{{ url_for('add_questions_to_test', test_id=test.id) }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.text.label(class="form-control-label") }}
+                {{ form.text(class="form-control " + ("is-invalid" if form.text.errors else ""), rows="3") }}
+                {% if form.text.errors %}<div class="invalid-feedback">{% for error in form.text.errors %}<span>{{ error }}</span>{% endfor %}</div>{% endif %}
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.option_a.label(class="form-control-label") }}
+                    {{ form.option_a(class="form-control " + ("is-invalid" if form.option_a.errors else "")) }}
+                    {% if form.option_a.errors %}<div class="invalid-feedback">{% for error in form.option_a.errors %}<span>{{ error }}</span>{% endfor %}</div>{% endif %}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.option_b.label(class="form-control-label") }}
+                    {{ form.option_b(class="form-control " + ("is-invalid" if form.option_b.errors else "")) }}
+                    {% if form.option_b.errors %}<div class="invalid-feedback">{% for error in form.option_b.errors %}<span>{{ error }}</span>{% endfor %}</div>{% endif %}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{ form.option_c.label(class="form-control-label") }} (Optional)
+                    {{ form.option_c(class="form-control " + ("is-invalid" if form.option_c.errors else "")) }}
+                    {% if form.option_c.errors %}<div class="invalid-feedback">{% for error in form.option_c.errors %}<span>{{ error }}</span>{% endfor %}</div>{% endif %}
+                </div>
+                <div class="form-group col-md-6">
+                    {{ form.option_d.label(class="form-control-label") }} (Optional)
+                    {{ form.option_d(class="form-control " + ("is-invalid" if form.option_d.errors else "")) }}
+                    {% if form.option_d.errors %}<div class="invalid-feedback">{% for error in form.option_d.errors %}<span>{{ error }}</span>{% endfor %}</div>{% endif %}
+                </div>
+            </div>
+            <div class="form-group">
+                {{ form.correct_option.label(class="form-control-label") }}
+                {{ form.correct_option(class="form-control " + ("is-invalid" if form.correct_option.errors else "")) }}
+                {% if form.correct_option.errors %}<div class="invalid-feedback">{% for error in form.correct_option.errors %}<span>{{ error }}</span>{% endfor %}</div>{% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn btn-success") }}
+                <a href="{{ url_for('dashboard_teacher') }}" class="btn btn-secondary">Done Adding Questions</a>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-5">
+        <h4>Existing Questions ({{ questions|length }})</h4>
+        {% if questions %}
+        <ul class="list-group">
+            {% for q in questions %}
+            <li class="list-group-item">
+                <strong>Q: {{ q.text[:80] }}...</strong>
+                <br>
+                <small>A: {{ q.option_a }}, B: {{ q.option_b }} {% if q.option_c %}, C: {{ q.option_c }}{% endif %} {% if q.option_d %}, D: {{ q.option_d }}{% endif %}</small>
+                <br>
+                <small>Correct: <strong>Option {{ q.correct_option|upper }}</strong></small>
+                <!-- Add delete/edit question if needed -->
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No questions added yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

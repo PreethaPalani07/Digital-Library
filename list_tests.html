@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Available Tests{% endblock %}
+
+{% block content %}
+<h2>Available Online Tests</h2>
+{% if tests %}
+    <div class="list-group">
+        {% for test in tests %}
+            <div class="list-group-item list-group-item-action">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">{{ test.title }}</h5>
+                    <small>{{ test.questions|length }} Questions</small>
+                </div>
+                <p class="mb-1">Subject: {{ test.subject }}</p>
+                <p class="mb-1"><small>Created by: {{ test.creator.username }}</small></p>
+                <a href="{{ url_for('take_test', test_id=test.id) }}" class="btn btn-primary btn-sm mt-2">Take Test</a>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>No tests are currently available. Please check back later.</p>
+{% endif %}
+{% endblock %}

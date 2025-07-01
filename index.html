@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Digital Library{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to the Digital Library!</h1>
+    <p class="lead">Your one-stop destination for all learning materials, video lectures, interactive chat with teachers, and online assessments.</p>
+    <hr class="my-4">
+    <p>Empowering students with accessible and comprehensive educational resources.</p>
+    {% if not current_user.is_authenticated %}
+    <a class="btn btn-primary btn-lg" href="{{ url_for('register') }}" role="button">Get Started</a>
+    <a class="btn btn-secondary btn-lg ml-2" href="{{ url_for('login') }}" role="button">Login</a>
+    {% else %}
+        {% if current_user.role == 'student' %}
+            <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard_student') }}" role="button">Go to Dashboard</a>
+        {% elif current_user.role == 'teacher' %}
+            <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard_teacher') }}" role="button">Go to Dashboard</a>
+        {% elif current_user.role == 'admin' %}
+            <a class="btn btn-primary btn-lg" href="{{ url_for('dashboard_admin') }}" role="button">Go to Dashboard</a>
+        {% endif %}
+    {% endif %}
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <h2>Learn Anytime</h2>
+        <p>Access video lectures and study materials 24/7 from anywhere.</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Interactive Learning</h2>
+        <p>Clarify your doubts by chatting directly with your teachers.</p>
+    </div>
+    <div class="col-md-4">
+        <h2>Self-Assessment</h2>
+        <p>Take online tests to regularly evaluate your understanding.</p>
+    </div>
+</div>
+{% endblock %}

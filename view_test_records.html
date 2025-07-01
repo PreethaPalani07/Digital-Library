@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Test Records: {{ test.title }}{% endblock %}
+
+{% block content %}
+<h2>Test Records for: {{ test.title }}</h2>
+<p>Subject: {{ test.subject }}</p>
+<hr>
+
+{% if attempts %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Score</th>
+            <th>Percentage</th>
+            <th>Attempt Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for attempt in attempts %}
+        <tr>
+            <td>{{ attempt.student_user.username }} ({{ attempt.student_user.email }})</td>
+            <td>{{ attempt.score }} / {{ attempt.total_questions }}</td>
+            <td>{{ "%.2f"|format((attempt.score / attempt.total_questions) * 100 if attempt.total_questions > 0 else 0) }}%</td>
+            <td>{{ attempt.attempt_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>
+                <a href="{{ url_for('test_result', attempt_id=attempt.id) }}" class="btn btn-sm btn-info">View Details</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No students have attempted this test yet.</p>
+{% endif %}
+
+{% if current_user.role == 'teacher' %}
+<a href="{{ url_for('dashboard_teacher') }}" class="btn btn-secondary">Back to Dashboard</a>
+{% elif current_user.role == 'admin' %}
+<a href="{{ url_for('dashboard_admin') }}" class="btn btn-secondary">Back to Admin Dashboard</a>
+{% endif %}
+{% endblock %}
