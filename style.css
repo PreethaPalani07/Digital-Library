@@ -1,0 +1,145 @@
+/* static/css/style.css */
+
+body {
+    padding-top: 56px; /* Adjust if your navbar height changes */
+    padding-bottom: 60px; /* Height of the footer */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.container {
+    flex: 1; /* Makes the container take up available space, pushing footer down */
+}
+
+.footer {
+    background-color: #f8f9fa; /* Light background for footer */
+    /* position: fixed; */ /* Uncomment if you want a truly sticky footer, adjust body padding-bottom */
+    /* bottom: 0; */
+    /* width: 100%; */
+    line-height: 60px; /* Vertically center the text if footer height is fixed */
+}
+
+
+/* Form styling improvements (optional, Bootstrap does a good job) */
+.form-control-label {
+    font-weight: bold;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+.invalid-feedback {
+    display: block; /* Ensure error messages are shown */
+}
+
+
+/* Card styling for view_materials */
+.card-title {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+.card-subtitle {
+    font-size: 0.9rem;
+}
+.card-text {
+    font-size: 0.95rem;
+    color: #555;
+}
+.card-footer {
+    background-color: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+}
+
+
+/* Chat Window Styles */
+#chat-window {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    max-height: 400px; /* Ensure it doesn't grow too large */
+    display: flex;
+    flex-direction: column-reverse; /* New messages at the bottom, scroll to see older */
+}
+
+#chat-window p {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 10px;
+    max-width: 80%;
+    word-wrap: break-word;
+}
+
+#chat-window .message-container {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+#chat-window .message-bubble {
+    padding: 8px 12px;
+    border-radius: 15px;
+    max-width: 70%;
+    word-wrap: break-word;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+}
+
+#chat-window .my-message .message-bubble {
+    background-color: #007bff; /* Blue for sent messages */
+    color: white;
+    margin-left: auto; /* Align to the right */
+    border-bottom-right-radius: 5px;
+}
+#chat-window .my-message .message-meta {
+    text-align: right;
+    margin-left: auto;
+}
+
+
+#chat-window .other-message .message-bubble {
+    background-color: #e9ecef; /* Light grey for received messages */
+    color: #333;
+    margin-right: auto; /* Align to the left */
+    border-bottom-left-radius: 5px;
+}
+#chat-window .other-message .message-meta {
+    text-align: left;
+    margin-right: auto;
+}
+
+#chat-window .message-meta {
+    font-size: 0.75rem;
+    color: #777;
+    margin-top: 2px;
+}
+
+
+#chat-window .system-message {
+    font-style: italic;
+    color: #6c757d;
+    text-align: center;
+    font-size: 0.9em;
+    width: 100%;
+}
+
+#users-online-list .list-group-item {
+    font-size: 0.9em;
+    padding: 0.5rem 1rem;
+}
+
+/* Fix for footer when content is short */
+html {
+  position: relative;
+  min-height: 100%;
+}
+/* body { */
+  /* Margin bottom by footer height */
+  /* margin-bottom: 60px;  */
+/* } */
+/* .footer { */
+  /* position: absolute; */
+  /* bottom: 0; */
+  /* width: 100%; */
+  /* Set the fixed height of the footer here */
+  /* height: 60px; */
+  /* line-height: 60px;  */ /* Vertically center the text there */
+  /* background-color: #f5f5f5; */
+/* } */
